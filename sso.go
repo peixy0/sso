@@ -29,7 +29,7 @@ func NewSingleSignOnService() *SingleSignOnService {
 	}
 	endpoint := os.Getenv("SSO_ENDPOINT")
 	if endpoint == "" {
-		endpoint = "http://127.0.0.1:13000/"
+		endpoint = "http://127.0.0.1:13000"
 	}
 	client := &http.Client{
 		Timeout: 1 * time.Second,
@@ -54,7 +54,7 @@ func (service *SingleSignOnService) ValidateToken(c *gin.Context) *SingleSignOnT
 }
 
 func (service *SingleSignOnService) GetToken(tokenId string) *SingleSignOnToken {
-	endpoint := service.endpoint + "api/token/" + service.service + "/" + tokenId
+	endpoint := service.endpoint + "/api/token/" + service.service + "/" + tokenId
 	resp, err := service.client.Get(endpoint)
 	if err != nil {
 		return nil
