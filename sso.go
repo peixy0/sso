@@ -12,8 +12,8 @@ import (
 type SingleSignOnToken struct {
 	Id        string `json:"id"`
 	Service   string `json:"service"`
-	CreatedAt int64  `json:"created_at"`
-	ExpireAt  int64  `json:"expire_at"`
+	CreatedAt int64  `json:"createdAt"`
+	ExpireAt  int64  `json:"expireAt"`
 }
 
 type SingleSignOnService struct {

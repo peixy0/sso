@@ -15,8 +15,8 @@ const tokenDurationInMs int64 = 30 * 24 * 3600 * 1000
 type Token struct {
 	Id        string `json:"id"`
 	Service   string `json:"service"`
-	CreatedAt int64  `json:"created_at"`
-	ExpireAt  int64  `json:"expire_at"`
+	CreatedAt int64  `json:"createdAt"`
+	ExpireAt  int64  `json:"expireAt"`
 }
 
 type createTokenReq struct {
