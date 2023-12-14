@@ -17,9 +17,9 @@ type SingleSignOnToken struct {
 }
 
 type SingleSignOnService struct {
+	client   *http.Client
 	service  string
 	endpoint string
-	client   *http.Client
 }
 
 func NewSingleSignOnService() *SingleSignOnService {
@@ -34,7 +34,7 @@ func NewSingleSignOnService() *SingleSignOnService {
 	client := &http.Client{
 		Timeout: 1 * time.Second,
 	}
-	return &SingleSignOnService{service, endpoint, client}
+	return &SingleSignOnService{service: service, endpoint: endpoint, client: client}
 }
 
 func (service *SingleSignOnService) ValidateToken(c *gin.Context) *SingleSignOnToken {

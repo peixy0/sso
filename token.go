@@ -9,8 +9,10 @@ import (
 	"time"
 )
 
-const tokenLen int64 = 16
-const tokenDurationInMs int64 = 30 * 24 * 3600 * 1000
+const (
+	tokenLen          int64 = 16
+	tokenDurationInMs int64 = 30 * 24 * 3600 * 1000
+)
 
 type Token struct {
 	Id        string `json:"id"`
@@ -20,14 +22,14 @@ type Token struct {
 }
 
 type createTokenReq struct {
-	service string
 	result  chan *Token
+	service string
 }
 
 type getTokenReq struct {
+	result  chan *Token
 	id      string
 	service string
-	result  chan *Token
 }
 
 type deleteTokenReq struct {
@@ -89,7 +91,7 @@ func (service *TokenService) purgeExpiredTokens(now int64) {
 
 func (service *TokenService) RequestToken(requestedService string) *Token {
 	result := make(chan *Token)
-	req := &createTokenReq{service: requestedService, result: result}
+	req := &createTokenReq{result: result, service: requestedService}
 	service.eventCh <- req
 	return <-result
 }
