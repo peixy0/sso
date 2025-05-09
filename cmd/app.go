@@ -119,6 +119,7 @@ func main() {
 		panic("error initializing session key")
 	}
 	store := cookie.NewStore(buf)
+	store.Options(sessions.Options{Secure: false})
 	router.Use(sessions.Sessions("session", store))
 	router.GET("/", loginPage)
 	router.POST("/", tryLogin)
