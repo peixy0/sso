@@ -6,18 +6,18 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type LoginService struct {
-	encryptedMasterKey string
+type Authenticator struct {
+	encryptedMasterKey []byte
 }
 
-func NewLoginService() *LoginService {
+func NewAuthenticator() *Authenticator {
 	key := os.Getenv("SSO_MASTERKEY")
-	return &LoginService{
-		encryptedMasterKey: key,
+	return &Authenticator{
+		encryptedMasterKey: []byte(key),
 	}
 }
 
-func (s *LoginService) IsValidCredential(secret string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(s.encryptedMasterKey), []byte(secret))
+func (a *Authenticator) Authenticate(secret string) bool {
+	err := bcrypt.CompareHashAndPassword(a.encryptedMasterKey, []byte(secret))
 	return err == nil
 }
