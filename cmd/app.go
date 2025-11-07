@@ -75,7 +75,12 @@ func newCookieStore() (cookie.Store, error) {
 		return nil, fmt.Errorf("failed to generate session key: %w", err)
 	}
 	store := cookie.NewStore(buf)
-	store.Options(sessions.Options{Secure: false})
+	store.Options(sessions.Options{
+		Secure:   false,
+		HttpOnly: true,
+		Path:     "/",
+		MaxAge:   3600 * 24 * 7,
+	})
 	return store, nil
 }
 
