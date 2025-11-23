@@ -1,21 +1,21 @@
 <!doctype html>
 <html>
   <head>
-    <title>登录</title>
+    <title>Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       :root {
         --primary-color: #3498db;
-        --primary-color-hover: #2980b9;
         --danger-color: #e74c3c;
         --background-color: #f8f9fa;
         --card-background-color: #ffffff;
         --text-color: #333;
-        --subtle-text-color: #5f6368;
         --border-color: #e0e0e0;
         --shadow-color: rgba(0, 0, 0, .1);
         --border-radius: 8px;
-        --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+
+        --mouse-x: 0px;
+        --mouse-y: 0px;
       }
       * {
         box-sizing: border-box;
@@ -26,7 +26,6 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Helvetica, Arial, sans-serif;
         font-size: 16px;
-        line-height: 1.5;
         background-color: var(--background-color);
         color: var(--text-color);
         display: flex;
@@ -43,27 +42,28 @@
         padding: 2.5rem;
         background-color: var(--card-background-color);
         border-radius: var(--border-radius);
-        box-shadow: var(--box-shadow);
+        box-shadow: 0 4px 6px var(--shadow-color);
         text-align: center;
       }
-      h1 {
-        margin-bottom: 20px;
-        color: var(--primary-color);
-      }
+
       .msg,
       .error {
         padding: 0.6rem;
         border-radius: var(--border-radius);
         border: 1px solid;
+        font-weight: bold;
       }
       .msg {
         border-color: var(--primary-color);
         color: var(--primary-color);
+        background-color: rgba(52, 152, 219, 0.1);
       }
       .error {
         border-color: var(--danger-color);
         color: var(--danger-color);
+        background-color: rgba(231, 76, 60, 0.1);
       }
+
       .login {
         display: flex;
         flex-direction: column;
@@ -76,32 +76,57 @@
         border: 1px solid var(--border-color);
         border-radius: var(--border-radius);
         outline: none;
-        transition: border-color 0.3s, box-shadow 0.3s;
+        background: #fafafa;
+        transition: 0.3s;
       }
       input[type="password"]:focus {
         border-color: var(--primary-color);
+        background: #fff;
       }
-      button {
+
+      .secured-badge {
+        position: relative;
+        padding: 3px;
+        border-radius: var(--border-radius);
+
+        background: conic-gradient(
+          from var(--angle, 0deg),
+          #3498db,
+          #9b59b6,
+          #e74c3c,
+          #f39c12,
+          #2ecc71,
+          #3498db
+        );
+
+        cursor: default;
+        user-select: none;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      }
+
+      .badge-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
         width: 100%;
         padding: 15px;
-        font-size: 16px;
+        background-color: var(--card-background-color);
+        color: var(--text-color);
         font-weight: bold;
-        color: #fff;
-        background-color: var(--primary-color);
-        border: none;
-        border-radius: var(--border-radius);
-        cursor: pointer;
-        transition: background-color 0.3s;
-      }
-      button:hover {
-        background-color: var(--primary-color-hover);
+        font-size: 16px;
+        border-radius: 6px;
+        letter-spacing: 1px;
       }
     </style>
   </head>
   <body>
     <div class="main">
       {{ if .msg }}
-      <div class="msg">{{ .msg }}</div>
+      <div class="secured-badge" id="trackingBadge">
+        <div class="badge-content">
+          {{ .msg }}
+        </div>
+      </div>
       {{ end }}
       {{ if .error }}
       <div class="error">{{ .error }}</div>
@@ -114,9 +139,27 @@
           placeholder="Enter your password"
           autofocus
         />
-        <button type="submit">Login</button>
       </form>
       {{ end }}
     </div>
+
+    <script>
+      const badge = document.getElementById('trackingBadge');
+
+      document.addEventListener('mousemove', (e) => {
+        const root = document.documentElement;
+        root.style.setProperty('--mouse-x', e.clientX + 'px');
+        root.style.setProperty('--mouse-y', e.clientY + 'px');
+
+        const rect = badge.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const radians = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+        const degrees = radians * (180 / Math.PI) + 90;
+
+        badge.style.setProperty('--angle', degrees + 'deg');
+      });
+    </script>
   </body>
 </html>
